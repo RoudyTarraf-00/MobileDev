@@ -40,7 +40,7 @@ const Login=({navigation,users,setUsers})=>{
             const user = await response.json();
 
             if (user && Object.keys(user).length > 0) {
-                setError("welcome");
+                navigation.navigate('HomePage',{user})
             } else {
                 setError('Email or password is incorrect');
             }
