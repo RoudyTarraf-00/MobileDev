@@ -13,6 +13,8 @@ import SupportPage from './Components/SupportPage';
 import Transactions from './Components/Transactions';
 import Request from './Components/Request';
 import PendingRequests from './Components/PendingRequests';
+import MyQRPage from "./Components/MyQRPage";
+import ScanQRPage from "./Components/ScanQRPage";
 
 
 export default function App() {
@@ -64,6 +66,14 @@ export default function App() {
 
         <Stack.Screen name='PendingRequests' >
           {props => <PendingRequests {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+        
+        <Stack.Screen name='MyQRPage' >
+          {props => <MyQRPage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='ScanQRPage' >
+          {props => <ScanQRPage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
       </Stack.Navigator>

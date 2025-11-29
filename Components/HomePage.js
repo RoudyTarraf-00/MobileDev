@@ -11,87 +11,72 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-
 const HomePage = (props) => {
-  const user = props.route?.params?.user 
-  const [transactions,setTransactions]= useState([])
-
-  const [globalUser,setGlobalUser]= useState(user)
-
-
-
+  const user = props.route?.params?.user;
+  const [transactions, setTransactions] = useState([]);
+  const [globalUser, setGlobalUser] = useState(user);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
 
-   
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    fetchTransactions()
-    fetchUser()
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    fetchTransactions();
+    fetchUser();
 
     setRefreshing(false);
-
   };
 
-  const  fetchUser= async ()=>{
-
+  const fetchUser = async () => {
     try {
-        const response = await fetch(
-          `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/users/phone/${user.phone}`,
-          {
-            method: "GET",
-          }
-        );
+      const response = await fetch(
+        `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/users/phone/${user.phone}`,
+        {
+          method: "GET",
+        }
+      );
 
-        if (!response.ok) {
+      if (!response.ok) {
         const msg = await response.text();
         alert("Error: " + msg);
         return;
       }
-        let temp= await response.json()
-        setGlobalUser(temp)
-
-      } catch (err) {
-        console.error("Network error:", err);
-      } finally {
-        
-      }
-
-  }
-
+      let temp = await response.json();
+      setGlobalUser(temp);
+    } catch (err) {
+      console.error("Network error:", err);
+    } finally {
+    }
+  };
 
   const fetchTransactions = async () => {
-      
-      try {
-        const response = await fetch(
-          `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/transactions/${user.phone}`,
-          {
-            method: "GET",
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          if (Array.isArray(data) && data.length > 0) {
-            setTransactions(data);
-          } else {
-            setTransactions([]);
-          }
-        } else {
-          const errText = await response.text();
-          console.error("Fetch failed:", errText);
+    try {
+      const response = await fetch(
+        `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/transactions/${user.phone}`,
+        {
+          method: "GET",
         }
-      } catch (err) {
-        console.error("Network error:", err);
-      } finally {
-        
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          setTransactions(data);
+        } else {
+          setTransactions([]);
+        }
+      } else {
+        const errText = await response.text();
+        console.error("Fetch failed:", errText);
       }
-    };
+    } catch (err) {
+      console.error("Network error:", err);
+    } finally {
+    }
+  };
 
-
- useEffect(() => {
+  useEffect(() => {
     fetchTransactions();
   }, []);
 
@@ -100,14 +85,10 @@ const HomePage = (props) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
-         refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
-
-
-      
-
         {/* ================= TOP DARK SECTION ================= */}
         <View style={styles.topSection}>
           {/* Header */}
@@ -119,7 +100,10 @@ const HomePage = (props) => {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.notificationWrapper} onPress={()=>props.navigation.navigate('ProfilePage',{user})}>
+            <TouchableOpacity
+              style={styles.notificationWrapper}
+              onPress={() => props.navigation.navigate("ProfilePage", { user })}
+            >
               <Ionicons name="person" size={22} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -128,29 +112,52 @@ const HomePage = (props) => {
           <View style={styles.servicesSection}>
             <Text style={styles.servicesTitle}>Services</Text>
             <View style={styles.servicesRow}>
-              {/* Scan & Pay (selected) */}
-              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('PendingRequests',{user})}>
+              {/* Requests */}
+              <TouchableOpacity
+                style={styles.serviceBoxActive}
+                onPress={() =>
+                  props.navigation.navigate("PendingRequests", { user })
+                }
+              >
                 <View style={styles.serviceIconCircleActive}>
-                  <Ionicons name="hand-left-outline" size={22} color="#2563EB" />
+                  <Ionicons
+                    name="hand-left-outline"
+                    size={22}
+                    color="#2563EB"
+                  />
                 </View>
                 <Text style={styles.serviceTextActive}>Requests</Text>
               </TouchableOpacity>
 
-              {/* Others */}
-              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('TransferPage',{user})} >
+              {/* Send */}
+              <TouchableOpacity
+                style={styles.serviceBoxActive}
+                onPress={() =>
+                  props.navigation.navigate("TransferPage", { user })
+                }
+              >
                 <View style={styles.serviceIconCircleActive}>
                   <MaterialIcons name="send" size={22} color="#2563EB" />
                 </View>
                 <Text style={styles.serviceTextActive}>Send</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('Request',{user})}>
+              {/* Request */}
+              <TouchableOpacity
+                style={styles.serviceBoxActive}
+                onPress={() => props.navigation.navigate("Request", { user })}
+              >
                 <View style={styles.serviceIconCircleActive}>
-                  <MaterialIcons name="call-received" size={22} color="#2563EB" />
+                  <MaterialIcons
+                    name="call-received"
+                    size={22}
+                    color="#2563EB"
+                  />
                 </View>
                 <Text style={styles.serviceTextActive}>Request</Text>
               </TouchableOpacity>
 
+              {/* Wallet (back to wallet icon/text) */}
               <TouchableOpacity style={styles.serviceBoxActive}>
                 <View style={styles.serviceIconCircleActive}>
                   <MaterialIcons name="wallet" size={22} color="#2563EB" />
@@ -158,56 +165,78 @@ const HomePage = (props) => {
                 <Text style={styles.serviceTextActive}>Wallet</Text>
               </TouchableOpacity>
             </View>
+
+            {/* QR SUBMENU (always visible) */}
+            <View style={styles.qrMenu}>
+              <TouchableOpacity
+                style={styles.qrOption}
+                onPress={() =>
+                  props.navigation.navigate("ScanQRPage", {
+                    user: globalUser,
+                  })
+                }
+              >
+                <View style={styles.qrOptionIcon}>
+                  <Ionicons name="scan-outline" size={18} color="#2563EB" />
+                </View>
+                <Text style={styles.qrOptionText}>Send by QR</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.qrOption}
+                onPress={() =>
+                  props.navigation.navigate("MyQRPage", {
+                    user: globalUser,
+                  })
+                }
+              >
+                <View style={styles.qrOptionIcon}>
+                  <Ionicons
+                    name="qr-code-outline"
+                    size={18}
+                    color="#2563EB"
+                  />
+                </View>
+                <Text style={styles.qrOptionText}>Receive by QR</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
         {/* ================= WHITE MAIN SECTION ================= */}
         <View style={styles.mainSection}>
-         
-
           {/* Card */}
           <View style={styles.cardContainer}>
             <View style={styles.blueCard}>
               <Text style={styles.balanceTitle}>Current Balance</Text>
-              <Text style={styles.balanceAmount}>
-                $ {globalUser.balance}
-              </Text>
+              <Text style={styles.balanceAmount}>$ {globalUser.balance}</Text>
 
               <View style={styles.cardBottomRow}>
                 <Text style={styles.cardNumber}>5282 3456 7890 1289</Text>
                 <Text style={styles.cardDate}>09/25</Text>
               </View>
-
-              
             </View>
           </View>
 
-
-            {renderTransactions(transactions,globalUser,props.navigation)}
-          
-          
+          {renderTransactions(transactions, globalUser, props.navigation)}
         </View>
       </ScrollView>
 
-
-
       <TouchableOpacity
-      style={styles.floatingButton}
-      onPress={() => props.navigation.navigate("SupportPage",{user:globalUser})}
-    >
-      <Ionicons name="chatbubble-outline" size={28} color="#FFFFFF" />
-    </TouchableOpacity>
-
-
+        style={styles.floatingButton}
+        onPress={() =>
+          props.navigation.navigate("SupportPage", { user: globalUser })
+        }
+      >
+        <Ionicons name="chatbubble-outline" size={28} color="#FFFFFF" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-
-
-const renderTransactions = (transactions = [], globalUser,navigation) => {
+const renderTransactions = (transactions = [], globalUser, navigation) => {
   // Filter out REQUEST transactions first
-  const filtered = transactions.filter(tx => tx.status !== "REQUEST");
+  const filtered = transactions.filter((tx) => tx.status !== "REQUEST");
 
   // Limit to 3
   const recent = filtered.slice(0, 3);
@@ -237,9 +266,7 @@ const renderTransactions = (transactions = [], globalUser,navigation) => {
             <Text style={styles.transactionDate}>
               From: {tx.senderPhone}
             </Text>
-            <Text style={styles.transactionDate}>
-              To: {tx.receiverPhone}
-            </Text>
+            <Text style={styles.transactionDate}>To: {tx.receiverPhone}</Text>
           </View>
 
           <Text
@@ -249,23 +276,25 @@ const renderTransactions = (transactions = [], globalUser,navigation) => {
                 : styles.transactionAmountGreen
             }
           >
-            {tx.senderPhone === globalUser.phone ? "- " : "+ "}$ {Math.abs(tx.amount)}
+            {tx.senderPhone === globalUser.phone ? "- " : "+ "}$
+            {Math.abs(tx.amount)}
           </Text>
         </View>
       ))}
 
-     
-     {recent.length !== 0 && (
-  <TouchableOpacity style={styles.showAllButton} onPress={()=>navigation.navigate('Transactions',{user:globalUser})}>
-    <Text style={styles.showAllText}>Show All</Text>
-  </TouchableOpacity>
-)}
-
-
+      {recent.length !== 0 && (
+        <TouchableOpacity
+          style={styles.showAllButton}
+          onPress={() =>
+            navigation.navigate("Transactions", { user: globalUser })
+          }
+        >
+          <Text style={styles.showAllText}>Show All</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
-
 
 export default HomePage;
 
@@ -358,7 +387,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  /* Other services */
+  /* Other services (unused here but kept) */
   serviceBox: {
     width: 72,
     height: 90,
@@ -372,6 +401,37 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 8,
     textAlign: "center",
+  },
+
+  /* QR submenu */
+  qrMenu: {
+    marginTop: 12,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  qrOption: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+  },
+  qrOptionIcon: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: "#E0ECFF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 8,
+  },
+  qrOptionText: {
+    color: "#111827",
+    fontSize: 12,
+    fontWeight: "600",
   },
 
   /* WHITE MAIN AREA */
@@ -518,36 +578,34 @@ const styles = StyleSheet.create({
   },
 
   floatingButton: {
-    position: 'absolute',
-    bottom: 50,        // distance from bottom
-    right: 30,         // distance from right
-    backgroundColor: '#2563EB',  // your app’s blue
+    position: "absolute",
+    bottom: 50, // distance from bottom
+    right: 30, // distance from right
+    backgroundColor: "#2563EB", // your app’s blue
     width: 60,
     height: 60,
-    borderRadius: 30,  // makes it round
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 10,     // shadow for Android
-    shadowColor: '#000', // shadow for iOS
+    borderRadius: 30, // makes it round
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 10, // shadow for Android
+    shadowColor: "#000", // shadow for iOS
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    zIndex: 999,        // stays on top
+    zIndex: 999, // stays on top
   },
   showAllButton: {
-  marginTop: 10,
-  paddingVertical: 8,
-  paddingHorizontal: 14,
-  alignSelf: "flex-start",
-  backgroundColor: "#2563EB",          // light gray
-  borderRadius: 8,
-  alignSelf:'center'
-},
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    alignSelf: "center",
+    backgroundColor: "#2563EB", // light gray
+    borderRadius: 8,
+  },
 
-showAllText: {
-  color: "#F3F4F6",                    // nice blue
-  fontSize: 14,
-  fontWeight: "600",
-},
-
+  showAllText: {
+    color: "#F3F4F6", // nice blue
+    fontSize: 14,
+    fontWeight: "600",
+  },
 });
