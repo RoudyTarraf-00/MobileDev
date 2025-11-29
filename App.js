@@ -8,6 +8,7 @@ import SignUp from './Components/SignUp';
 import Starter from './Components/Starter';
 import HomePage from './Components/HomePage';
 import ProfilePage from './Components/ProfilePage';
+import TransferPage from './Components/TransferPage';
 
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
   return (
     <NavigationContainer>
 
-      <Stack.Navigator screenOptions={{headerShown:false}} >
+      <Stack.Navigator screenOptions={{headerShown:true}} >
 
         <Stack.Screen name='Starter' >
           {props => <Starter {...props} />}
@@ -33,12 +34,16 @@ export default function App() {
           {props => <SignUp {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
-        <Stack.Screen name='HomePage' >
+        <Stack.Screen name='HomePage' options={{ headerShown: false }}  >
           {props => <HomePage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
         <Stack.Screen name='ProfilePage' >
           {props => <ProfilePage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='TransferPage' >
+          {props => <TransferPage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
       </Stack.Navigator>

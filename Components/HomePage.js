@@ -107,7 +107,7 @@ const HomePage = (props) => {
               </TouchableOpacity>
 
               {/* Others */}
-              <TouchableOpacity style={styles.serviceBox} >
+              <TouchableOpacity style={styles.serviceBox} onPress={()=>props.navigation.navigate('TranserPage',{user})} >
                 <Ionicons name="send" size={22} color="#FFFFFF" />
                 <Text style={styles.serviceText}>Send Money</Text>
               </TouchableOpacity>
