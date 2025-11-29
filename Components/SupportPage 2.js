@@ -9,18 +9,18 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
- 
-const RESEND_API_KEY = "re_NAGWffTq_DpPtrYLaRSAkCZMHg1FVW7hk";
- 
+
+const RESEND_API_KEY = "re_NAGWffTq_DpPtrYLaRSAkCZMHg1FVW7hk"; 
+
 const SupportPage = ({ navigation, route }) => {
   const user=route.param.user;
- 
- 
+
+
   const[name,setName]=useState(user.name || "");
   const[email,setEmail]=useState(user.email || "");
   const[message,setMessage]=useState("");
   const[sending,setSending]=useState(false);
- 
+
   const sendSupport=async()=>
   {
     if(!name || !email || !message)
@@ -30,7 +30,7 @@ const SupportPage = ({ navigation, route }) => {
     }
     try {
       setSending(true);
- 
+
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -50,10 +50,10 @@ const SupportPage = ({ navigation, route }) => {
           `,
         }),
       });
- 
+
       const data = await response.json();
       console.log("Resend status:", response.status, data);
- 
+
       if (response.ok) {
         Alert.alert("Thank you", "Your message was sent to support.");
         setMessage("");
@@ -70,12 +70,12 @@ const SupportPage = ({ navigation, route }) => {
       Alert.alert('error',"Network error , please try again later");
         }
   }
- 
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Support</Text>
- 
+
         <Text style={styles.label}>Name</Text>
         <TextInput
           style={styles.input}
@@ -83,7 +83,7 @@ const SupportPage = ({ navigation, route }) => {
           onChangeText={setName}
           placeholder="Your name"
         />
- 
+
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
@@ -93,7 +93,7 @@ const SupportPage = ({ navigation, route }) => {
           autoCapitalize="none"
           keyboardType="email-address"
         />
- 
+
         <Text style={styles.label}>Message</Text>
         <TextInput
           style={[styles.input, styles.messageInput]}
@@ -103,7 +103,7 @@ const SupportPage = ({ navigation, route }) => {
           multiline
           textAlignVertical="top"
         />
- 
+
         <TouchableOpacity
           style={[styles.button, sending && { opacity: 0.7 }]}
           onPress={sendSupport}
@@ -117,9 +117,9 @@ const SupportPage = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
- 
+
 export default SupportPage;
- 
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: "#020C2F" },
   container: { padding: 20, paddingBottom: 40 },
