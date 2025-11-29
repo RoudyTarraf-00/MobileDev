@@ -11,11 +11,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-let globalUser;
+
 const HomePage = (props) => {
   const user = props.route?.params?.user 
   const [transactions,setTransactions]= useState([])
-  globalUser=user
+
+  const [globalUser,setGlobalUser]= useState(user)
+
+
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -25,10 +28,37 @@ const HomePage = (props) => {
    
     await new Promise(resolve => setTimeout(resolve, 1200));
     fetchTransactions()
+    fetchUser()
 
     setRefreshing(false);
 
   };
+
+  const  fetchUser= async ()=>{
+
+    try {
+        const response = await fetch(
+          `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/users/phone/${user.phone}`,
+          {
+            method: "GET",
+          }
+        );
+
+        if (!response.ok) {
+        const msg = await response.text();
+        alert("Error: " + msg);
+        return;
+      }
+        let temp= await response.json()
+        setGlobalUser(temp)
+
+      } catch (err) {
+        console.error("Network error:", err);
+      } finally {
+        
+      }
+
+  }
 
 
   const fetchTransactions = async () => {
@@ -62,10 +92,6 @@ const HomePage = (props) => {
 
 
  useEffect(() => {
-    
-
-    
-
     fetchTransactions();
   }, []);
 
@@ -85,7 +111,7 @@ const HomePage = (props) => {
             <View style={styles.profileRow}>
               <View>
                 <Text style={styles.greeting}>Good evening,</Text>
-                <Text style={styles.userName}>{user.name}</Text>
+                <Text style={styles.userName}>{globalUser.name}</Text>
               </View>
             </View>
 
@@ -107,7 +133,7 @@ const HomePage = (props) => {
               </TouchableOpacity>
 
               {/* Others */}
-              <TouchableOpacity style={styles.serviceBox} onPress={()=>props.navigation.navigate('TranserPage',{user})} >
+              <TouchableOpacity style={styles.serviceBox} onPress={()=>props.navigation.navigate('TransferPage',{user})} >
                 <Ionicons name="send" size={22} color="#FFFFFF" />
                 <Text style={styles.serviceText}>Send Money</Text>
               </TouchableOpacity>
@@ -134,7 +160,7 @@ const HomePage = (props) => {
             <View style={styles.blueCard}>
               <Text style={styles.balanceTitle}>Current Balance</Text>
               <Text style={styles.balanceAmount}>
-                $ {user.balance}
+                $ {globalUser.balance}
               </Text>
 
               <View style={styles.cardBottomRow}>
@@ -147,7 +173,7 @@ const HomePage = (props) => {
           </View>
 
 
-            {renderTransactions(transactions)}
+            {renderTransactions(transactions,globalUser)}
           
           
         </View>
@@ -158,7 +184,7 @@ const HomePage = (props) => {
 
 
 
-const renderTransactions = (transactions = []) => {
+const renderTransactions = (transactions = [],globalUser) => {
   if (!transactions.length) {
     return (
       <View style={styles.transactionsSection}>
