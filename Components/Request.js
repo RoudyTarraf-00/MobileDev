@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 
-const TransferPage = (props) => {
+const Request = (props) => {
   const phone = props.route.params.user.phone;
 
   const [form, setForm] = useState({
-    receiverPhone: "",
+    senderPhone: "",
     amount: "",
     message: "",
   });
@@ -54,7 +54,7 @@ const TransferPage = (props) => {
     }
 
     if(form.receiverPhone===phone){
-        alert('Cant send money to yourself')
+        alert('Cant enter your phone number')
         return
     }
 
@@ -63,20 +63,13 @@ const TransferPage = (props) => {
       return;
     }
 
-    if (form.amount > globalUser.balance) {
-      alert("Not enough balance");
-      return;
-    }
+    
 
     try {
       setLoading(true);
 
-      const url =
-        `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/transactions/send` +
-        `?senderPhone=${encodeURIComponent(globalUser.phone)}` +
-        `&receiverPhone=${encodeURIComponent(form.receiverPhone)}` +
-        `&amount=${form.amount}` +
-        `&message=${encodeURIComponent(form.message)}`;
+      const url = `https://mobileproject-arbab5hmekdwa0gv.francecentral-01.azurewebsites.net/api/transactions/request?requesterPhone=${phone}&payerPhone=${form.senderPhone}&amount=${form.amount}&message=${encodeURIComponent(form.message)}`;
+
 
       const response = await fetch(url, { method: "POST" });
 
@@ -86,10 +79,10 @@ const TransferPage = (props) => {
         return;
       }
 
-      alert("Transaction successful!");
-      setGlobalUser({...globalUser,balance:globalUser.balance-form.amount})
+      alert("Request successful!");
+      
 
-      setForm({receiverPhone: "",
+      setForm({senderPhone: "",
     amount: "",
     message: "",})
 
@@ -108,22 +101,18 @@ const TransferPage = (props) => {
     keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
   >
       <View style={styles.card}>
-        <Text style={styles.title}>Transfer Money</Text>
-
-        {/* Balance */}
-        <Text style={styles.label}>Available Balance</Text>
-        <Text style={styles.balance}>$ {globalUser.balance.toFixed(2)}</Text>
+        <Text style={styles.title}>Request Money</Text>
 
         {/* Sender */}
         <Text style={styles.label}>Your Phone</Text>
         <TextInput value={globalUser.phone} editable={false} style={styles.inputDisabled} />
 
         {/* Receiver */}
-        <Text style={styles.label}>Receiver Phone</Text>
+        <Text style={styles.label}>Request from Phone</Text>
         <TextInput
           keyboardType="numeric"
-          value={form.receiverPhone}
-          onChangeText={(change) => setForm({ ...form, receiverPhone: change })}
+          value={form.senderPhone}
+          onChangeText={(change) => setForm({ ...form, senderPhone: change })}
           style={styles.input}
           placeholder="Enter receiver phone"
           placeholderTextColor="#9CA3AF"
@@ -159,7 +148,7 @@ const TransferPage = (props) => {
   );
 };
 
-export default TransferPage;
+export default Request;
 
 const styles = StyleSheet.create({
   pageContainer: {

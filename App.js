@@ -10,6 +10,9 @@ import HomePage from './Components/HomePage';
 import ProfilePage from './Components/ProfilePage';
 import TransferPage from './Components/TransferPage';
 import SupportPage from './Components/SupportPage';
+import Transactions from './Components/Transactions';
+import Request from './Components/Request';
+import PendingRequests from './Components/PendingRequests';
 
 
 export default function App() {
@@ -49,6 +52,18 @@ export default function App() {
 
         <Stack.Screen name='SupportPage' >
           {props => <SupportPage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='Transactions' >
+          {props => <Transactions {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='Request' >
+          {props => <Request {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='PendingRequests' >
+          {props => <PendingRequests {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
       </Stack.Navigator>

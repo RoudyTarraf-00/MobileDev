@@ -114,7 +114,7 @@ const HomePage = (props) => {
           <View style={styles.headerRow}>
             <View style={styles.profileRow}>
               <View>
-                <Text style={styles.greeting}>Good evening,</Text>
+                <Text style={styles.greeting}>Welcome Back,</Text>
                 <Text style={styles.userName}>{globalUser.name}</Text>
               </View>
             </View>
@@ -129,27 +129,33 @@ const HomePage = (props) => {
             <Text style={styles.servicesTitle}>Services</Text>
             <View style={styles.servicesRow}>
               {/* Scan & Pay (selected) */}
-              <TouchableOpacity style={styles.serviceBoxActive}>
+              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('PendingRequests',{user})}>
                 <View style={styles.serviceIconCircleActive}>
-                  <MaterialIcons name="qr-code-scanner" size={22} color="#2563EB" />
+                  <Ionicons name="hand-left-outline" size={22} color="#2563EB" />
                 </View>
-                <Text style={styles.serviceTextActive}>Scan & Pay</Text>
+                <Text style={styles.serviceTextActive}>Requests</Text>
               </TouchableOpacity>
 
               {/* Others */}
-              <TouchableOpacity style={styles.serviceBox} onPress={()=>props.navigation.navigate('TransferPage',{user})} >
-                <Ionicons name="send" size={22} color="#FFFFFF" />
-                <Text style={styles.serviceText}>Send Money</Text>
+              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('TransferPage',{user})} >
+                <View style={styles.serviceIconCircleActive}>
+                  <MaterialIcons name="send" size={22} color="#2563EB" />
+                </View>
+                <Text style={styles.serviceTextActive}>Send</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.serviceBox}>
-                <MaterialIcons name="call-received" size={22} color="#FFFFFF" />
-                <Text style={styles.serviceText}>Receive Money</Text>
+              <TouchableOpacity style={styles.serviceBoxActive} onPress={()=>props.navigation.navigate('Request',{user})}>
+                <View style={styles.serviceIconCircleActive}>
+                  <MaterialIcons name="call-received" size={22} color="#2563EB" />
+                </View>
+                <Text style={styles.serviceTextActive}>Request</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.serviceBox}>
-                <FontAwesome5 name="wallet" size={18} color="#FFFFFF" />
-                <Text style={styles.serviceText}>Go to Wallet</Text>
+              <TouchableOpacity style={styles.serviceBoxActive}>
+                <View style={styles.serviceIconCircleActive}>
+                  <MaterialIcons name="wallet" size={22} color="#2563EB" />
+                </View>
+                <Text style={styles.serviceTextActive}>Wallet</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -177,7 +183,7 @@ const HomePage = (props) => {
           </View>
 
 
-            {renderTransactions(transactions,globalUser)}
+            {renderTransactions(transactions,globalUser,props.navigation)}
           
           
         </View>
@@ -199,8 +205,14 @@ const HomePage = (props) => {
 
 
 
-const renderTransactions = (transactions = [],globalUser) => {
-  if (!transactions.length) {
+const renderTransactions = (transactions = [], globalUser,navigation) => {
+  // Filter out REQUEST transactions first
+  const filtered = transactions.filter(tx => tx.status !== "REQUEST");
+
+  // Limit to 3
+  const recent = filtered.slice(0, 3);
+
+  if (!recent.length) {
     return (
       <View style={styles.transactionsSection}>
         <Text style={styles.transactionsTitle}>Recent Transactions</Text>
@@ -215,7 +227,7 @@ const renderTransactions = (transactions = [],globalUser) => {
     <View style={styles.transactionsSection}>
       <Text style={styles.transactionsTitle}>Recent Transactions</Text>
 
-      {transactions.map((tx) => (
+      {recent.map((tx) => (
         <View key={tx.id} style={styles.transactionRow}>
           <View>
             <Text style={styles.transactionName}>{tx.message}</Text>
@@ -232,18 +244,28 @@ const renderTransactions = (transactions = [],globalUser) => {
 
           <Text
             style={
-              tx.senderPhone===globalUser.phone
+              tx.senderPhone === globalUser.phone
                 ? styles.transactionAmountRed
                 : styles.transactionAmountGreen
             }
           >
-            {tx.senderPhone===globalUser.phone ? "- " : "+ "}$ {Math.abs(tx.amount)}
+            {tx.senderPhone === globalUser.phone ? "- " : "+ "}$ {Math.abs(tx.amount)}
           </Text>
         </View>
       ))}
+
+     
+     {recent.length !== 0 && (
+  <TouchableOpacity style={styles.showAllButton} onPress={()=>navigation.navigate('Transactions',{user:globalUser})}>
+    <Text style={styles.showAllText}>Show All</Text>
+  </TouchableOpacity>
+)}
+
+
     </View>
   );
 };
+
 
 export default HomePage;
 
@@ -512,4 +534,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     zIndex: 999,        // stays on top
   },
+  showAllButton: {
+  marginTop: 10,
+  paddingVertical: 8,
+  paddingHorizontal: 14,
+  alignSelf: "flex-start",
+  backgroundColor: "#2563EB",          // light gray
+  borderRadius: 8,
+  alignSelf:'center'
+},
+
+showAllText: {
+  color: "#F3F4F6",                    // nice blue
+  fontSize: 14,
+  fontWeight: "600",
+},
+
 });
