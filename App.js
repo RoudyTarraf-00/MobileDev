@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Login from './Components/Login';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUp from './Components/SignUp';
@@ -15,24 +15,35 @@ import Request from './Components/Request';
 import PendingRequests from './Components/PendingRequests';
 import MyQRPage from "./Components/MyQRPage";
 import ScanQRPage from "./Components/ScanQRPage";
+import WalletPage from './Components/WalletPage';
 
 
 export default function App() {
 
-  const [users,setUsers]= useState([])
+  const [users, setUsers] = useState([]);
 
-  const Stack = createNativeStackNavigator()
+  const Stack = createNativeStackNavigator();
+
+  // 🔔 Ask for notification permission once when app mounts
+  useEffect(() => {
+    (async () => {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== "granted") {
+        await Notifications.requestPermissionsAsync();
+      }
+    })();
+  }, []);
 
   return (
     <NavigationContainer>
 
-      <Stack.Navigator screenOptions={{headerShown:true}} >
+      <Stack.Navigator screenOptions={{ headerShown: true }} >
 
         <Stack.Screen name='Starter' >
           {props => <Starter {...props} />}
         </Stack.Screen>
 
-          <Stack.Screen name='Login' >
+        <Stack.Screen name='Login' >
           {props => <Login {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
@@ -76,10 +87,12 @@ export default function App() {
           {props => <ScanQRPage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
+        <Stack.Screen name='WalletPage'>
+         {props => <WalletPage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
       </Stack.Navigator>
       
     </NavigationContainer>
   );
 }
-
-

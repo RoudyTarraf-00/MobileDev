@@ -47,22 +47,46 @@ const ProfilePage = (props) => {
 },[]);
   
  
-        // his part need to update its api
     const updateField=(field,value)=>
     {
         setProfile((prev) => ({ ...prev, [field]: value }));
     };
  
-        const handleSave = async () => {
-        try {
-            setSaving(true);
-            Alert.alert("Saved", "Profile updated ");
-        } catch (e) {
-            Alert.alert("Error", "Failed to save profile");
-        } finally {
-            setSaving(false);
+    const handleSave = async () => {
+      try {
+        setSaving(true);
+    
+        const url = `${API_BASE}/api/users/update/${profile.phone}`;
+    
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: profile.name,
+            email: profile.email,
+          }),
+        });
+    
+        if (!response.ok) {
+          const msg = await response.text();
+          console.log("Update error:", msg);
+          Alert.alert("Error", "Failed to save profile: " + msg);
+          return;
         }
-        };
+    
+        const updated = await response.json();
+        setProfile(updated);
+    
+        Alert.alert("Saved", "Profile updated successfully");
+      } catch (e) {
+        console.log(e);
+        Alert.alert("Error", "Failed to save profile");
+      } finally {
+        setSaving(false);
+      }
+    };
  
  
  

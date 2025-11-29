@@ -158,12 +158,15 @@ const HomePage = (props) => {
               </TouchableOpacity>
 
               {/* Wallet (back to wallet icon/text) */}
-              <TouchableOpacity style={styles.serviceBoxActive}>
-                <View style={styles.serviceIconCircleActive}>
-                  <MaterialIcons name="wallet" size={22} color="#2563EB" />
-                </View>
-                <Text style={styles.serviceTextActive}>Wallet</Text>
-              </TouchableOpacity>
+              <TouchableOpacity
+  style={styles.serviceBoxActive}
+  onPress={() => props.navigation.navigate("WalletPage", { user: globalUser })}
+>
+  <View style={styles.serviceIconCircleActive}>
+    <MaterialIcons name="wallet" size={22} color="#2563EB" />
+  </View>
+  <Text style={styles.serviceTextActive}>Wallet</Text>
+</TouchableOpacity>
             </View>
 
             {/* QR SUBMENU (always visible) */}
