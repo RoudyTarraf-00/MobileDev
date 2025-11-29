@@ -86,7 +86,11 @@ const ProfilePage = (props) => {
  
             const handleLogout=()=>
             {
-                props.navigation.replace("Login");
+                props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Login' }],
+                });
+
             };
  
             if(loading || !profile)
@@ -460,6 +464,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom:30
   },
   logoutText: {
     marginLeft: 6,
