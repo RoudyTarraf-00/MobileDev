@@ -28,7 +28,7 @@ const ScanQRPage = ({ navigation, route }) => {
       }
 
       // 👉 Only pass receiverPhone; name is not needed
-      navigation.navigate("TransferPage", {
+      navigation.replace("TransferPage", {
         user: currentUser,
         receiverPhone: parsed.phone,
       });
