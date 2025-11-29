@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 
 const TransferPage = (props) => {
-  const phone = props.route.params.user.phone;
-
-  const [form, setForm] = useState({
-    receiverPhone: "",
-    amount: "",
-    message: "",
-  });
+    const { user, receiverPhone } = props.route?.params || {};
+    const phone = user.phone;
+  
+    const [form, setForm] = useState({
+      receiverPhone: receiverPhone || "",
+      amount: "",
+      message: "",
+    });
+  
 
   const [loading, setLoading] = useState(true);
   const [globalUser, setGlobalUser] = useState(null);

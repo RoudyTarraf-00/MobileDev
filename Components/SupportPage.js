@@ -13,7 +13,7 @@ import {
 const RESEND_API_KEY = "re_NAGWffTq_DpPtrYLaRSAkCZMHg1FVW7hk";
  
 const SupportPage = ({ navigation, route }) => {
-  const user=route.param.user;
+  const user = route?.params?.user || {}; 
  
  
   const[name,setName]=useState(user.name || "");
