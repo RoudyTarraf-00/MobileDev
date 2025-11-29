@@ -89,7 +89,7 @@ const HomePage = (props) => {
               </View>
             </View>
 
-            <TouchableOpacity style={styles.notificationWrapper}>
+            <TouchableOpacity style={styles.notificationWrapper} onPress={()=>props.navigation.navigate('ProfilePage',{user})}>
               <Ionicons name="person" size={22} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -107,7 +107,7 @@ const HomePage = (props) => {
               </TouchableOpacity>
 
               {/* Others */}
-              <TouchableOpacity style={styles.serviceBox}>
+              <TouchableOpacity style={styles.serviceBox} >
                 <Ionicons name="send" size={22} color="#FFFFFF" />
                 <Text style={styles.serviceText}>Send Money</Text>
               </TouchableOpacity>

@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUp from './Components/SignUp';
 import Starter from './Components/Starter';
 import HomePage from './Components/HomePage';
+import ProfilePage from './Components/ProfilePage';
 
 
 export default function App() {
@@ -34,6 +35,10 @@ export default function App() {
 
         <Stack.Screen name='HomePage' >
           {props => <HomePage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='ProfilePage' >
+          {props => <ProfilePage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
       </Stack.Navigator>
