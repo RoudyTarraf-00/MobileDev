@@ -104,6 +104,10 @@ const HomePage = (props) => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       >
+
+
+      
+
         {/* ================= TOP DARK SECTION ================= */}
         <View style={styles.topSection}>
           {/* Header */}
@@ -178,6 +182,17 @@ const HomePage = (props) => {
           
         </View>
       </ScrollView>
+
+
+
+      <TouchableOpacity
+      style={styles.floatingButton}
+      onPress={() => props.navigation.navigate("SupportPage",{user:globalUser})}
+    >
+      <Ionicons name="chatbubble-outline" size={28} color="#FFFFFF" />
+    </TouchableOpacity>
+
+
     </SafeAreaView>
   );
 };
@@ -478,5 +493,23 @@ const styles = StyleSheet.create({
   circleAvatarText: {
     color: "#2563EB",
     fontWeight: "700",
+  },
+
+  floatingButton: {
+    position: 'absolute',
+    bottom: 50,        // distance from bottom
+    right: 30,         // distance from right
+    backgroundColor: '#2563EB',  // your app’s blue
+    width: 60,
+    height: 60,
+    borderRadius: 30,  // makes it round
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 10,     // shadow for Android
+    shadowColor: '#000', // shadow for iOS
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    zIndex: 999,        // stays on top
   },
 });

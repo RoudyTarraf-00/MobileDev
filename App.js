@@ -9,6 +9,7 @@ import Starter from './Components/Starter';
 import HomePage from './Components/HomePage';
 import ProfilePage from './Components/ProfilePage';
 import TransferPage from './Components/TransferPage';
+import SupportPage from './Components/SupportPage';
 
 
 export default function App() {
@@ -44,6 +45,10 @@ export default function App() {
 
         <Stack.Screen name='TransferPage' >
           {props => <TransferPage {...props} users={users} setUsers={setUsers} />}
+        </Stack.Screen>
+
+        <Stack.Screen name='SupportPage' >
+          {props => <SupportPage {...props} users={users} setUsers={setUsers} />}
         </Stack.Screen>
 
       </Stack.Navigator>
