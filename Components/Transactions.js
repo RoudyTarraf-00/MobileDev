@@ -51,7 +51,7 @@ const Transactions =(props)=>{
      return(
         <ScrollView>
             <View style={styles.mainSection}>
-           {renderTransactions(transactions,user)}
+           {renderTransactions(transactions.reverse(),user)}
            </View>
         </ScrollView>
     )
